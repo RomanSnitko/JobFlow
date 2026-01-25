@@ -1,45 +1,81 @@
 components_manager:
-    task_processors:                  # Описываем потоки (thread pools)
-        main-task-processor:          # Основной поток для логики
-            worker_threads: 4         # Укажи число (например, 4)
+    task_processors:
+        main-task-processor:
+            worker_threads: 4
             thread_name: main-worker
-        fs-task-processor:            # Поток для работы с файлами и БД
+        fs-task-processor:
             worker_threads: 2
             thread_name: fs-worker
 
     default_task_processor: main-task-processor
 
-    components:                       # Configuring components that were registered via component_list
+    components:
         server:
-            listener:                 # configuring the main listening socket...
-                port: 8080            # ...to listen on this port and...
-                task_processor: main-task-processor    # ...process incoming requests on this task processor.
+            listener:
+                port: 8080
+                task_processor: main-task-processor
+        
         logging:
             fs-task-processor: fs-task-processor
             loggers:
                 default:
                     file_path: '@stderr'
-                    level: $logger-level
-                    overflow_behavior: discard  # Drop logs if the system is too busy to write them down.
+                    level: info
+                    overflow_behavior: discard
 
-        # Dynamic config options. Cache is disabled, updates are disabled.
+        # Провайдер читает JSON
+        default-secdist-provider:
+            config: ./configs/secure_data.json
+
+        secdist: {}
+
+        # PostgreSQL (Настройки напрямую)
+        postgres-db-1:
+            dbconnection: 'postgresql://jobflow_admin:jobflow_pass@127.0.0.1:5432/jobflow_db'
+            blocking_task_processor: fs-task-processor
+            dns_resolver: async 
+
+        # DNS клиент
+        dns-client:
+            network-attempts: 3
+            fs-task-processor: fs-task-processor
+
+        # Redis
+        redis-tasks:
+            groups:
+              - config_name: redis-tasks # ИЗМЕНЕНО: должно совпадать с ключом в JSON
+                db: 0
+            subscribe_groups: []
+            thread_pools:
+                redis_thread_pool_size: 4
+                sentinel_thread_pool_size: 1
+
+        # Твои хендлеры
+        handler-task-submit:
+            path: /v1/tasks/submit
+            method: POST
+            task_processor: main-task-processor
+        handler-task-status:
+            path: /v1/tasks/status
+            method: GET
+            task_processor: main-task-processor
+        handler-hello:
+            path: /hello
+            method: GET,POST
+            task_processor: main-task-processor
+
+        # Твои компоненты
+        task-scheduler:
+        task-worker:
+
+        # Системные компоненты
+        testsuite-support: {}
+        http-client:
+            fs-task-processor: fs-task-processor
         dynamic-config:
-            # For most of userver dynamic configs, defaults are used, some are overridden here.
-            # See userver "dynamic config" docs for what configs exist.
             defaults:
                 HTTP_CLIENT_CONNECTION_POOL_SIZE: 1000
-
-        testsuite-support: {}
-
-        http-client:
-            load-enabled: $is_testing
-            fs-task-processor: fs-task-processor
-
-        dns-client:
-            fs-task-processor: fs-task-processor
-
         tests-control:
-            load-enabled: $is_testing
             path: /tests/{action}
             method: POST
             task_processor: main-task-processor
@@ -49,8 +85,3 @@ components_manager:
             task_processor: main-task-processor
             throttling_enabled: false
             url_trailing_slash: strict-match
-
-        handler-hello:                    # Finally! Our handler.
-            path: /hello                  # Registering handler by URL '/hello'.
-            method: GET,POST              # It will only reply to GET (HEAD) and POST requests.
-            task_processor: main-task-processor  # Run it on CPU bound task processor

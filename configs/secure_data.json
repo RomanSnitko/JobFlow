@@ -1,0 +1,15 @@
+{
+  "redis_settings": {
+    "redis-tasks": {
+      "password": "",
+      "sentinels": [],
+      "shards": [
+        {
+          "name": "master0",
+          "host": "127.0.0.1",
+          "port": 6379
+        }
+      ]
+    }
+  }
+}
