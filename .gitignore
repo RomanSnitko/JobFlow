@@ -1,3 +1,13 @@
-build*/
-logs/
+# Сборка
+/build*/
+/compile_commands.json
+
+# Логи и временные файлы
+/logs/
 .vscode/
+*.user
+
+# Python (тестовое окружение)
+__pycache__/
+venv*/
+.pytest_cache/

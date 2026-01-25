@@ -4,7 +4,7 @@
 
 #include <userver/server/handlers/http_handler_base.hpp>
 
-namespace service_template {
+namespace job_flow {
 
 namespace {
 
@@ -17,7 +17,7 @@ public:
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest &request,
       userver::server::request::RequestContext &) const override {
-    return service_template::SayHelloTo(request.GetArg("name"));
+    return job_flow::SayHelloTo(request.GetArg("name"));
   }
 };
 
