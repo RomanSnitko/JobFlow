@@ -4,7 +4,7 @@
 
 #include <userver/server/handlers/http_handler_base.hpp>
 
-namespace job_flow 
+namespace job_flow
 {
 
 namespace {
