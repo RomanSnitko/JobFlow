@@ -4,11 +4,13 @@
 
 #include <userver/server/handlers/http_handler_base.hpp>
 
-namespace job_flow {
+namespace job_flow 
+{
 
 namespace {
 
-class Hello final : public userver::server::handlers::HttpHandlerBase {
+class Hello final : public userver::server::handlers::HttpHandlerBase 
+{
 public:
   static constexpr std::string_view kName = "handler-hello";
 
@@ -16,14 +18,16 @@ public:
 
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest &request,
-      userver::server::request::RequestContext &) const override {
+      userver::server::request::RequestContext &) const override 
+  {
     return job_flow::SayHelloTo(request.GetArg("name"));
   }
 };
 
 } // namespace
 
-std::string SayHelloTo(std::string_view name) {
+std::string SayHelloTo(std::string_view name) 
+{
   if (name.empty()) {
     name = "unknown user";
   }
@@ -31,7 +35,8 @@ std::string SayHelloTo(std::string_view name) {
   return fmt::format("Hello, {}!\n", name);
 }
 
-void AppendHello(userver::components::ComponentList &component_list) {
+void AppendHello(userver::components::ComponentList &component_list) 
+{
   component_list.Append<Hello>();
 }
 
