@@ -1,6 +1,20 @@
 # JobFlow
 Высокопроизводительная платформа распределенной обработки задач (аналог Celery/Sidekiq). Включает асинхронный Task API, систему планирования и сеть воркеров. Построена на микросервисной архитектуре с использованием C++20, корутин (userver), PostgreSQL и Redis. Реализованы механизмы гарантированной доставки, политики повторных попыток (retries) и обработка отказов через Dead Letter Queue. Позволяет масштабировать выполнение тяжелых фоновых операций независимо от основного API.
 
+![C++20](https://img.shields.io/badge/C++20-00599C?logo=c%2B%2B&logoColor=white)
+![userver](https://img.shields.io/badge/userver-framework-black?logo=yandex&logoColor=yellow)
+![Coroutines](https://img.shields.io/badge/Stackful_Coroutines-FF6F00?logo=convertio&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?logo=redis&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
+![Docker_Compose](https://img.shields.io/badge/Docker_Compose-2496ED?logo=docker&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)
+
+![HTTP](https://img.shields.io/badge/HTTP-FF6F00?logo=http&logoColor=white)
+![REST_API](https://img.shields.io/badge/REST_API-005571?logo=api&logoColor=white)
+![TCP/IP](https://img.shields.io/badge/TCP/IP-0A66C2?logo=protocols&logoColor=white)
+![JSON](https://img.shields.io/badge/JSON-000000?logo=json&logoColor=white)
+
 ## Project Structure
 ```text
 JobFlow/
