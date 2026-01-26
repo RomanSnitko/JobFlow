@@ -60,6 +60,8 @@ std::vector<models::Task> PostgresDAO::GetReadyTasks(int limit)
 
         tasks.push_back(std::move(task));
     }
+
+    return tasks;
 }
 
 void PostgresDAO::MarkAsFailed(const std::string& task_id, std::string_view error_message)
