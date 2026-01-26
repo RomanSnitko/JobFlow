@@ -15,6 +15,10 @@
 ![TCP/IP](https://img.shields.io/badge/TCP/IP-0A66C2?logo=protocols&logoColor=white)
 ![JSON](https://img.shields.io/badge/JSON-000000?logo=json&logoColor=white)
 
+![Google_Test](https://img.shields.io/badge/Google_Test-0071BC?logo=google&logoColor=white)
+![Python](https://img.shields.io/badge/Python_Testsuite-3776AB?logo=python&logoColor=white)
+![Pytest](https://img.shields.io/badge/Pytest-0A9EDC?logo=pytest&logoColor=white)
+
 ## Project Structure
 ```text
 JobFlow/
