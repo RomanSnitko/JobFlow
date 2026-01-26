@@ -15,6 +15,7 @@
 #include <job_flow/handlers/TaskStatusHandler.hpp>
 #include <job_flow/components/TaskScheduler.hpp>
 #include <job_flow/components/TaskWorker.hpp>
+#include <job_flow/models/Task.hpp>
 
 int main(int argc, char* argv[]) {
     auto component_list = userver::components::MinimalServerComponentList()

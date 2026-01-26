@@ -1,6 +1,12 @@
 #pragma once
+
 #include <string>
+#include <string_view>
+#include <userver/utils/datetime.hpp>
+#include <optional>
+
 #include <userver/formats/json/value.hpp>
+#include "userver/storages/postgres/io/chrono.hpp"
 
 namespace job_flow::models 
 {
@@ -14,13 +20,13 @@ enum class TaskStatus
     kFailed
 };
 
-struct Task 
+struct Task
 {
     std::string id;
     std::string type;
     TaskStatus status;
     userver::formats::json::Value payload;
-    std::chrono::system_clock::time_point run_at;
+    userver::storages::postgres::TimePointTz run_at;
     int retries{};
     int max_retries{};
     std::optional<std::string> last_error;
@@ -52,4 +58,4 @@ inline TaskStatus ToEnum(std::string_view statusStr)
     return TaskStatus::kPending;
 }
 
-}
+} // namespace job_flow::models 

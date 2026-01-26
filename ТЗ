@@ -21,7 +21,8 @@ Features:
 
     Task.hpp
 
-    Описать структуру task: UUID, тип (email/video), статус (pending/running/done/failed), 
+    Описать структуру task: UUID, тип (email/video), 
+    статус (pending/running/done/failed), 
     данные (JSON), время запуска.
 
     binds: Используется всеми модулями.
