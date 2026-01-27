@@ -73,4 +73,32 @@ void PostgresDAO::MarkAsFailed(const std::string& task_id, std::string_view erro
     );
 }
 
+std::optional<models::Task> PostgresDAO::GetTask(const std::string& task_id)
+{
+    auto result = pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kSlave,
+        "SELECT id, type, payload, status, retries, max_retries, run_at "
+        "FROM tasks "
+        "WHERE id = $1",
+        task_id
+    );
+
+    if (result.IsEmpty()) 
+    {
+        return std::nullopt;
+    }
+
+    auto row = result[0];
+    
+    models::Task task;
+    task.id = row["id"].As<std::string>();
+    task.type = row["type"].As<std::string>();
+    task.status = models::ToEnum(row["status"].As<std::string>());
+    task.payload = row["payload"].As<userver::formats::json::Value>();
+    task.run_at = row["run_at"].As<userver::storages::postgres::TimePointTz>();
+    task.retries = row["retries"].As<int>();
+    task.max_retries = row["max_retries"].As<int>();
+
+    return task;
+}
+
 }

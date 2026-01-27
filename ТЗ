@@ -47,8 +47,10 @@ Features:
 
     what:
 
-        Submit: принять JSON от клиента -> превратить в модель Task -> вызвать PostgresDAO::InsertTask.
-        Status: принять ID -> найти в базе -> вернуть клиенту JSON со статусом.
+        Submit: принять JSON от клиента -> превратить в модель Task -> 
+        вызвать PostgresDAO::InsertTask.
+        Status: принять ID -> найти в базе -> 
+        вернуть клиенту JSON со статусом.
 
     binds: Вызывает методы из PostgresDAO.
 

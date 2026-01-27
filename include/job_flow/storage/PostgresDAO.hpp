@@ -24,6 +24,8 @@ public:
 
     void MarkAsFailed(const std::string& task_id, std::string_view error_message);
 
+    std::optional<models::Task> GetTask(const std::string& task_id);
+
 private:
     userver::storages::postgres::ClusterPtr pg_cluster_;
 };
