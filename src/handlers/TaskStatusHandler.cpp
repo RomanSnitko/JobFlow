@@ -21,7 +21,7 @@ std::string TaskStatusHandler::HandleRequestThrow(
     const userver::server::http::HttpRequest& request,
     userver::server::request::RequestContext& /*context*/) const 
 {
-    const auto& task_id = request.GetArg("id");
+    const std::string& task_id = request.GetArg("id");
     if (task_id.empty()) 
     {
         request.SetResponseStatus(userver::server::http::HttpStatus::kBadRequest);
@@ -29,7 +29,7 @@ std::string TaskStatusHandler::HandleRequestThrow(
     }
 
     storage::PostgresDAO dao(pg_cluster_);
-    auto task_opt = dao.GetTask(task_id);
+    std::optional<models::Task> task_opt = dao.GetTask(task_id);
 
     if (!task_opt.has_value()) 
     {
