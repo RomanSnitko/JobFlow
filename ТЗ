@@ -73,7 +73,7 @@ Features:
 
     what: Создать фоновый процесс (userver::utils::PeriodicTask).
 
-    logic: Раз в секунду вызывает PostgresDAO::GetReadyTasks. 
+    logic: Раз в секунду вызывает PostgresDAO::GetReadyTasks.
     Если нашли ID -> вызываем RedisQueue::Push -> обновляем статус в БД на queued.
 
     binds: Соединяет Postgres и Redis.
