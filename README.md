@@ -1,5 +1,9 @@
 # JobFlow
-Высокопроизводительная платформа распределенной обработки задач (аналог Celery/Sidekiq). Включает асинхронный Task API, систему планирования и сеть воркеров. Построена на микросервисной архитектуре с использованием C++20, корутин (userver), PostgreSQL и Redis. Позволяет масштабировать выполнение тяжелых фоновых операций независимо от основного API.
+A submitted task is first validated by the API layer and persisted to PostgreSQL with a pending state. The TaskScheduler periodically queries the database for tasks whose run_at timestamp has been reached, transitions them to queued, and places their identifiers into Redis. Workers consume task identifiers from the queue, transition the corresponding records to running, execute the task, and finally persist either a completed or failed state together with the execution result or failure information.
+
+PostgreSQL acts as the durable source of task state and scheduling metadata, while Redis is used as the low-latency dispatch mechanism between the scheduler and workers. Workers are stateless with respect to task ownership, so additional instances can be started without changing the scheduling or API layers. Redis queue operations provide the coordination mechanism required for multiple worker instances to consume tasks concurrently.
+
+The service is built around asynchronous request processing and C++20 coroutines using userver. Database access, queue operations, scheduling loops, and worker execution are isolated into separate components, with HTTP handlers responsible for API-level concerns, DAOs encapsulating persistence, and background components managing scheduling and execution. This separation allows the API, scheduler, and worker layers to scale and evolve independently.
 
 ![C++20](https://img.shields.io/badge/C++20-00599C?logo=c%2B%2B&logoColor=white)
 ![userver](https://img.shields.io/badge/userver-framework-black?logo=yandex&logoColor=yellow)
@@ -18,14 +22,6 @@
 ![Google_Test](https://img.shields.io/badge/Google_Test-0071BC?logo=google&logoColor=white)
 ![Python](https://img.shields.io/badge/Python_Testsuite-3776AB?logo=python&logoColor=white)
 ![Pytest](https://img.shields.io/badge/Pytest-0A9EDC?logo=pytest&logoColor=white)
-
-## Lifecycle
-
-* Ingestion: Пользователь отправляет POST /v1/tasks/submit. Хендлер валидирует JSON и сохраняет задачу в PostgreSQL со статусом pending.
-* Detection: TaskScheduler (фоновый компонент) раз в секунду сканирует БД на наличие задач, готовых к запуску (run_at <= NOW()).
-* Dispatch: Релевантные задачи переводятся в статус queued, а их ID отправляются в высокоскоростную очередь Redis.
-* Execution: Сеть масштабируемых TaskWorker извлекает ID из Redis, обновляет статус в БД на running и приступает к выполнению бизнес-логики.
-* Completion: По завершении воркер устанавливает финальный статус completed (или failed с записью причины ошибки).
 
 ## Project Structure
 ```text
